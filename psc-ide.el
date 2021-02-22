@@ -781,9 +781,12 @@ on whether WARN is true.  Optionally EXPANDs type synonyms."
 
 (defun psc-ide-suggest-project-dir ()
   "Suggest a project directory to start the ide server in."
-  (if (and (fboundp 'projectile-project-root) (projectile-project-p))
-      (projectile-project-root)
-    default-directory))
+  (cond
+   ((and (fboundp 'projectile-project-root) (projectile-project-p))
+    (projectile-project-root))
+   ((fboundp 'project-root)
+     (project-root (project-current)))
+   (t default-directory)))
 
 (defun psc-ide-string-fontified (string)
   "Take a STRING and return it with syntax highlighting."
